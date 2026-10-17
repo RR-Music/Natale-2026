@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SAATI 45 · SAATI Music</title>
+<meta name="description" content="SAATI Music, edizione 45 giri, Natale 2026. Ascolta il lato A e il lato B.">
+<meta property="og:title" content="SAATI 45 · SAATI Music">
+<meta property="og:description" content="Edizione 45 giri, Natale 2026. Scegli il lato e premi Play.">
+<meta property="og:image" content="copertina.jpg">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2317140F'/><circle cx='50' cy='50' r='20' fill='%23B8321E'/><circle cx='50' cy='50' r='4' fill='%23fff'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --ink:#17140F; --red:#B8321E; --grey:#5F5952; --idle:#736C64;
+  --paper:#FAF8F4; --rule:#ECE6DC;
+  --serif:"Fraunces", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --sans:"Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --L:min(520px, calc((100vh - 160px) / 1.3));
+  --cover:calc(var(--L) * .54);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.mono{font-family:var(--mono);font-size:.78rem;letter-spacing:.02em}
+
+/* ---------- Pagina desktop: una schermata ---------- */
+.app{height:100vh;min-height:680px;display:flex;flex-direction:column;max-width:1320px;margin:0 auto;padding:0 40px}
+.mast{display:flex;align-items:baseline;gap:24px;padding:22px 0 16px;border-bottom:1px solid var(--rule)}
+.brand{font-family:var(--serif);font-weight:600;font-size:1.35rem;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;margin:0}
+.brand::before{content:"";width:15px;height:15px;border-radius:50%;background:radial-gradient(circle,var(--bg) 0 13%,var(--red) 14% 42%,var(--ink) 43%);flex:none;transform:translateY(1px)}
+.mast .ed{color:var(--grey)}
+.mast .cat{margin-left:auto;color:var(--grey)}
+.mast .short{display:none}
+
+main{flex:1;min-height:0;display:grid;padding:24px 0 24px;
+  grid-template-columns:var(--cover) calc(var(--L) - var(--cover) - 20px) minmax(0,1fr);
+  grid-template-rows:auto auto auto auto minmax(0,1fr);
+  grid-template-areas:
+    "cover colo sides"
+    "cover colo info"
+    "cover colo ctrl"
+    "cover colo prog"
+    "tt    tt   lyr";
+  column-gap:20px;row-gap:14px}
+.right{padding-left:36px}
+
+/* Copertina */
+.sleeve-block{grid-area:cover;position:relative;align-self:start}
+.sleeve{position:relative;z-index:2;width:100%;aspect-ratio:1;box-shadow:0 1px 2px rgba(23,20,15,.12),0 10px 24px -12px rgba(23,20,15,.35)}
+.sleeve img{width:100%;height:100%;object-fit:cover}
+.mdisc-slot{display:none}
+
+/* Colophon */
+.colo{grid-area:colo;margin:0;align-self:start;display:grid;gap:12px;padding-top:2px}
+.colo div{border-top:1px solid var(--rule);padding-top:7px}
+.colo dt{font-family:var(--mono);font-size:.72rem;color:var(--grey)}
+.colo dd{margin:1px 0 0;font-size:.95rem}
+
+/* Giradischi */
+.tt{grid-area:tt;align-self:end;width:var(--L)}
+.tt svg{width:100%;height:auto;display:block;overflow:visible}
+#disc{transform-box:view-box;transform-origin:190px 170px;animation:spin 1.333s linear infinite;animation-play-state:paused}
+.playing #disc{animation-play-state:running}
+@keyframes spin{to{transform:rotate(360deg)}}
+#arm{transform-box:view-box;transform-origin:440px 56px;transition:transform .9s cubic-bezier(.3,.7,.3,1)}
+#arm.track{transition:transform .35s linear}
+
+/* Lati */
+.sides{grid-area:sides;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sides button{height:48px;border:1px solid var(--ink);background:var(--bg);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-family:var(--mono);font-weight:500;font-size:.9rem;letter-spacing:.06em;transition:background .15s,color .15s}
+.sides button span{font-weight:400;color:var(--grey);letter-spacing:0}
+.sides button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.sides button[aria-pressed="true"] span{color:#cfc8bd}
+
+/* Brano */
+.info{grid-area:info;padding-top:6px}
+.info .pos{color:var(--grey);margin:0}
+.info h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,2.3vw,2.1rem);line-height:1.08;letter-spacing:-.015em;margin:4px 0 6px;font-variation-settings:"opsz" 96}
+.info h1 small{font-style:italic;font-weight:400;font-size:.62em;color:var(--grey);letter-spacing:0}
+.credits{margin:0;color:var(--grey);font-size:.9rem}
+.credits:empty{display:none}
+
+/* Comandi */
+.ctrl{grid-area:ctrl;display:flex;align-items:center;gap:14px}
+.skip{width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:var(--bg);font-family:var(--mono);font-size:.72rem;display:grid;place-items:center}
+.skip:hover{border-color:var(--ink)}
+.play{width:62px;height:62px;border-radius:50%;border:0;background:var(--red);color:#fff;display:grid;place-items:center;box-shadow:0 3px 0 #7d2012;transition:transform .08s,box-shadow .08s}
+.play:active{transform:translateY(2px);box-shadow:0 1px 0 #7d2012}
+.play svg{width:24px;height:24px}
+.play .i-pause,.playing .play .i-play{display:none}
+.playing .play .i-pause{display:block}
+.status{color:var(--grey);margin-left:4px;min-width:0}
+.sleeve.missing{background:var(--paper);border:1px dashed #C9C2B6;box-shadow:none;display:grid;place-items:center;text-align:center;padding:12px}
+.sleeve.missing img{display:none}
+.sleeve .miss{display:none;font-family:var(--mono);font-size:.72rem;color:var(--grey)}
+.sleeve.missing .miss{display:block}
+.status.err{color:var(--red)}
+.flip{display:none;border:0;background:none;padding:0;font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--red);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.ended .flip{display:inline}
+.ended .status{display:none}
+
+/* Avanzamento */
+.prog{grid-area:prog;display:flex;align-items:center;gap:12px;color:var(--grey);font-variant-numeric:tabular-nums}
+.seek{flex:1;-webkit-appearance:none;appearance:none;height:24px;background:transparent;margin:0;--p:0%}
+.seek::-webkit-slider-runnable-track{height:3px;background:linear-gradient(90deg,var(--ink) var(--p),var(--rule) var(--p))}
+.seek::-moz-range-track{height:3px;background:var(--rule)}
+.seek::-moz-range-progress{height:3px;background:var(--ink)}
+.seek::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ink);margin-top:-5px;border:0}
+.seek::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--ink);border:0}
+
+/* Testo sincronizzato */
+.lyr.right{padding-left:0;margin-left:36px}
+.lyr{grid-area:lyr;min-height:0;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--rule);border-radius:4px;margin-top:6px}
+.scroller{flex:1;min-height:0;overflow-y:auto;position:relative;padding:0 26px;overscroll-behavior:contain;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
+.scroller.scrolled{-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.scroller::-webkit-scrollbar{display:none}
+.lines{padding:22px 0 var(--half,120px)}
+.ln{margin:0;padding:5px 0 5px 18px;position:relative;color:var(--idle);font-size:1.02rem;line-height:1.35;cursor:pointer;transition:color .2s,font-size .2s}
+.ln.note{font-family:var(--serif);font-style:italic;font-size:.95rem}
+.ln.on{color:var(--ink);font-weight:650;font-size:1.22rem}
+.ln.on::before{content:"";position:absolute;left:0;top:calc(5px + .675em - 4px);width:8px;height:8px;border-radius:50%;background:var(--red)}
+.ln.on.note{font-weight:500}
+.ln .ts{display:none}
+
+/* Strumento di sincronizzazione (?sync) */
+.syncbar{display:none;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 14px;border-bottom:1px solid var(--rule)}
+.sync .syncbar{display:flex}
+.syncbar p{margin:0;flex:1 1 100%;color:var(--grey);font-size:.85rem}
+.syncbar button{border:1px solid var(--ink);background:var(--bg);border-radius:3px;padding:7px 12px;font-family:var(--mono);font-size:.78rem}
+.syncbar .mark{background:var(--ink);color:#fff;flex:1}
+.sync .ln .ts{display:inline-block;width:5.2em;margin-left:-.2em;font-family:var(--mono);font-size:.72rem;color:var(--grey);font-weight:400}
+.sync .ln.next{color:var(--ink);font-weight:650}
+.sync .ln.next::before{content:"";position:absolute;left:0;top:calc(5px + .675em - 4px);width:8px;height:8px;border-radius:50%;border:2px solid var(--red)}
+.sync .scroller{-webkit-mask-image:none;mask-image:none}
+
+/* ---------- Smartphone: disco dalla busta ---------- */
+@media (max-width:760px){
+  .app{height:auto;min-height:0;padding:0 18px}
+  .mast{padding:14px 0 10px}
+  .mast .brand,.mast .ed,.mast .cat{display:none}
+  .mast .short{display:block;color:var(--ink)}
+  .mast .short b{font-family:var(--serif);font-weight:600;font-size:1rem;font-family:var(--serif)}
+  main{display:flex;flex-direction:column;gap:12px;padding:16px 0 28px}
+  .right{padding-left:0}
+  .lyr.right{margin-left:0}
+  .tt{display:none}
+  .sleeve-block{width:190px;align-self:flex-start}
+  .mdisc-slot{display:block;position:absolute;z-index:1;top:5px;left:8px;width:180px;height:180px;
+    transform:translateX(22px);transition:transform .6s cubic-bezier(.3,.7,.3,1)}
+  .out .mdisc-slot{transform:translateX(66px)}
+  .mdisc{width:100%;height:100%;border-radius:50%;position:relative;
+    background:repeating-radial-gradient(circle,#24201b 0 .8px,#17140F .8px 2.2px);
+    box-shadow:0 6px 14px -6px rgba(23,20,15,.5);
+    animation:spin 1.333s linear infinite;animation-play-state:paused}
+  .playing .mdisc{animation-play-state:running}
+  .mdisc .lbl{position:absolute;inset:26%;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:1.3rem}
+  .mdisc .lbl::after{content:"";position:absolute;inset:40%;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--ink) inset}
+  .mdisc .lbl span{position:absolute;top:10%}
+  .mdisc::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 12%,rgba(255,255,255,.12) 16%,transparent 22% 62%,rgba(255,255,255,.08) 66%,transparent 72%)}
+  .info{padding-top:4px;order:0}
+  .info h1{font-size:1.5rem;margin:2px 0 4px}
+  .sides{order:1}
+  .ctrl{order:2}
+  .prog{order:3;margin-top:-6px}
+  .lyr{order:4;height:276px;flex:none;margin-top:0}
+  .colo{order:5;padding-top:28px;grid-template-columns:1fr 1fr;gap:12px 18px}
+  .scroller{padding:0 18px}
+  .ln{font-size:.98rem}
+  .ln.on{font-size:1.1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  #disc,.mdisc{animation:none}
+  #arm,#arm.track,.mdisc-slot,.ln{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="mast">
+    <p class="brand">SAATI Music</p>
+    <span class="ed mono" data-i18n="edition">Edizione 45 giri · Natale 2026</span>
+    <span class="cat mono">SM45-001</span>
+    <span class="short mono"><b>SAATI Music</b> · <span data-i18n="short">45 giri · 2026</span></span>
+  </header>
+
+  <main>
+    <div class="sleeve-block">
+      <div class="mdisc-slot" aria-hidden="true"><div class="mdisc"><div class="lbl"><span class="mside">A</span></div></div></div>
+      <div class="sleeve" id="sleeve"><img src="copertina.jpg" alt="" id="coverImg" width="1400" height="1400"><span class="miss">copertina.jpg<br>non trovata</span></div>
+    </div>
+
+    <div class="info right">
+      <p class="pos mono" id="pos">Lato A · A1</p>
+      <h1 id="title">SAATI Day</h1>
+      <p class="credits" id="credits"></p>
+    </div>
+
+    <div class="sides right" role="group" id="sides">
+      <button type="button" data-side="A" aria-pressed="true"><b data-i18n="sideA">LATO A</b><span id="durA">4:17</span></button>
+      <button type="button" data-side="B" aria-pressed="false"><b data-i18n="sideB">LATO B</b><span id="durB">4:01</span></button>
+    </div>
+
+    <div class="ctrl right">
+      <button class="skip" type="button" id="back" data-i18n-label="back">−10</button>
+      <button class="play" type="button" id="play">
+        <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+        <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg>
+      </button>
+      <button class="skip" type="button" id="fwd" data-i18n-label="fwd">+10</button>
+      <span class="status mono" id="status" aria-live="polite"></span>
+      <button class="flip" type="button" id="flip"></button>
+    </div>
+
+    <div class="prog right mono">
+      <span id="cur">0:00</span>
+      <input class="seek" id="seek" type="range" min="0" max="1000" step="1" value="0">
+      <span id="dur">0:00</span>
+    </div>
+
+    <section class="lyr right" id="lyr">
+      <div class="syncbar">
+        <p id="syncHelp"></p>
+        <button type="button" class="mark" id="mark">Segna riga</button>
+        <button type="button" id="undo">Annulla</button>
+        <button type="button" id="restart">Da capo</button>
+        <button type="button" id="save">Scarica .lrc</button>
+      </div>
+      <div class="scroller" id="scroller"><div class="lines" id="lines"></div></div>
+    </section>
+
+    <dl class="colo" id="colo"></dl>
+
+    <div class="tt" aria-hidden="true">
+      <svg viewBox="0 -24 520 384" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="labelPath" d="M190 139 a31 31 0 1 1 -0.01 0"/>
+          <radialGradient id="sheen" cx="50%" cy="50%" r="50%">
+            <stop offset="60%" stop-color="#fff" stop-opacity="0"/><stop offset="100%" stop-color="#fff" stop-opacity=".05"/>
+          </radialGradient>
+        </defs>
+        <!-- mobile -->
+        <rect x="1" y="-23" width="518" height="382" rx="10" fill="#FAF8F4" stroke="#ECE6DC" stroke-width="2"/>
+        <rect x="2" y="340" width="516" height="18" fill="#F2EEE6"/>
+        <!-- piatto -->
+        <circle cx="190" cy="170" r="152" fill="#A9A49C"/>
+        <circle cx="190" cy="170" r="147" fill="#C8C3BB"/>
+        <g stroke="#BAB5AD" stroke-width="1" fill="none">
+          <circle cx="190" cy="170" r="138"/><circle cx="190" cy="170" r="126"/><circle cx="190" cy="170" r="114"/>
+        </g>
+        <!-- disco -->
+        <circle cx="191" cy="173" r="106" fill="#17140F" opacity=".18"/>
+        <g id="disc">
+          <circle cx="190" cy="170" r="104" fill="#17140F"/>
+          <g fill="none" stroke="#262119" stroke-width=".8">
+            <circle cx="190" cy="170" r="100"/><circle cx="190" cy="170" r="96"/><circle cx="190" cy="170" r="91"/><circle cx="190" cy="170" r="86"/>
+            <circle cx="190" cy="170" r="81"/><circle cx="190" cy="170" r="75"/><circle cx="190" cy="170" r="70"/><circle cx="190" cy="170" r="64"/>
+            <circle cx="190" cy="170" r="59"/><circle cx="190" cy="170" r="54"/>
+          </g>
+          <circle cx="190" cy="170" r="84" fill="none" stroke="#0e0c09" stroke-width="2"/>
+          <circle cx="190" cy="170" r="46" fill="#B8321E"/>
+          <text font-family="IBM Plex Mono, monospace" font-size="6.4" fill="#fff" letter-spacing="1.1"><textPath href="#labelPath" id="labelText">SAATI MUSIC · SM45-001 · LATO A · 45 GIRI ·</textPath></text>
+          <text x="190" y="163" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="15" fill="#fff" id="labelSide">A</text>
+          <circle cx="190" cy="170" r="19" fill="#FAF8F4"/>
+          <!-- adattatore 45 giri -->
+          <g fill="#17140F"><circle cx="190" cy="170" r="7"/>
+            <path d="M190 170 L190 152 M190 170 L205.6 179 M190 170 L174.4 179" stroke="#17140F" stroke-width="5" stroke-linecap="round"/></g>
+          <circle cx="190" cy="170" r="2" fill="#B9B2A6"/>
+        </g>
+        <circle cx="190" cy="170" r="104" fill="url(#sheen)"/>
+        <path d="M122 96 A100 100 0 0 1 176 71" stroke="#fff" stroke-opacity=".08" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <!-- selettore 45 giri -->
+        <g font-family="IBM Plex Mono, monospace" font-size="11">
+          <rect x="370" y="290" width="120" height="34" rx="17" fill="#fff" stroke="#ECE6DC" stroke-width="1.5"/>
+          <text x="398" y="311" text-anchor="middle" fill="#736C64">33</text>
+          <rect x="432" y="295" width="52" height="24" rx="12" fill="#17140F"/>
+          <text x="458" y="311" text-anchor="middle" fill="#fff">45</text>
+          <circle cx="358" cy="307" r="4" fill="#B8321E" id="led" opacity=".25"/>
+        </g>
+        <!-- base del braccio -->
+        <circle cx="440" cy="56" r="26" fill="#fff" stroke="#ECE6DC" stroke-width="2"/>
+        <circle cx="440" cy="56" r="14" fill="#E8E2D8"/>
+        <!-- appoggio braccio -->
+        <rect x="433" y="238" width="14" height="30" rx="3" fill="#E8E2D8"/>
+        <g id="arm">
+          <rect x="430" y="8" width="20" height="30" rx="4" fill="#2B2722"/>
+          <line x1="440" y1="36" x2="440" y2="262" stroke="#9C958A" stroke-width="5" stroke-linecap="round"/>
+          <line x1="440" y1="36" x2="440" y2="262" stroke="#C9C3B8" stroke-width="2" stroke-linecap="round"/>
+          <path d="M440 258 l-4 30 h13 l2-30z" fill="#17140F"/>
+          <rect x="445" y="266" width="12" height="4" rx="2" fill="#17140F"/>
+          <circle cx="440" cy="56" r="7" fill="#17140F"/>
+        </g>
+      </svg>
+    </div>
+  </main>
+</div>
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+/* ============ Contenuti: modifica qui ============ */
+const CONFIG = {
+  per: "tutta la famiglia SAATI",   // lascia "" per nascondere
+  da:  "Renato Russo",               // lascia "" per nascondere
+  formato: "Singolo 7\" · 45 giri",
+  catalogo: "SM45-001",
+  sides: {
+    A: { brano:"A1", titolo:"SAATI Day", sottotitolo:"", interpreti:"", autori:"", audio:"lato-a.mp3", lrc:"lato-a.lrc" },
+    B: { brano:"B1", titolo:"Santa Claude", sottotitolo:"", interpreti:"", autori:"", audio:"lato-b.mp3", lrc:"lato-b.lrc" }
+  }
+};
+/* Copia di riserva dei .lrc: usata se la pagina è aperta da file locale o se il .lrc non si carica */
+const LRC_FALLBACK = {"A": "[ti:SAATI Day]\n[ar:SAATI Music]\n[by:sincronizzato a mano]\n[00:00.00]♪\n[00:05.10]Yehh\n[00:08.76]ohoh SAATI DAY ohoh\n[00:21.61]Oggi il sole entra in azienda,\n[00:24.95]c'è un sorriso in ogni età,\n[00:28.66]porte aperte, occhi che brillano,\n[00:32.51]questa festa è tutta qua.\n[00:36.22]Mamme, papà, figli e amici,\n[00:39.63]passi insieme nei reparti,\n[00:43.40]ogni filo racconta una storia,\n[00:47.11]ogni idea ci fa sognar.\n[00:52.04]Chi l'avrebbe mai pensato,\n[00:55.51]dietro a un gesto quotidiano,\n[00:59.15]c'è il lavoro e la passione\n[01:02.40]di una squadra che va lontano.\n[01:06.23]SAATI Day, vieni a vedere,\n[01:10.05]quanta vita c'è in ciò che fai,\n[01:13.62]dalle fabbriche fino al mondo,\n[01:16.95]siamo ovunque, più di quanto sai.\n[01:20.85]SAATI Day, mani nel futuro,\n[01:24.17]tra innovazione e fantasia,\n[01:28.29]oggi scopriamo insieme\n[01:32.05]la magia della tecnologia!\n[01:39.33]Nei filtri che proteggono la vita,\n[01:43.17]nelle stampe dai mille colori,\n[01:46.40]nelle reti che sfidano il tempo,\n[01:49.68]nelle idee che diventano valori.\n[01:53.86]Dall'elettronica alla medicina,\n[01:57.17]dall'energia alla creatività,\n[02:00.97]c'è un po' di SAATI in tante cose,\n[02:04.11]scoprile oggi con curiosità.\n[02:08.21]E ogni applicazione racconta\n[02:11.37]un'avventura da condividere,\n[02:15.56]perché dietro ogni innovazione\n[02:18.54]ci sono persone da applaudire.\n[02:22.30]SAATI Day, vieni a vedere,\n[02:26.30]quanta vita c'è in ciò che fai,\n[02:30.02]dalle fabbriche fino al mondo,\n[02:33.36]siamo ovunque, più di quanto sai.\n[02:36.80]SAATI Day, mani nel futuro,\n[02:40.45]tra innovazione e fantasia,\n[02:44.64]oggi scopriamo insieme\n[02:48.12]la magia della tecnologia!\n[02:54.47]Siamo una grande famiglia,\n[02:57.54]fatta di talento e di cuore,\n[03:01.12]e oggi apriamo le nostre porte\n[03:03.61]per condividere questo valore.\n[03:08.37]Da Appiano fino al mondo intero,\n[03:11.87]con passione e creatività,\n[03:15.70]ogni SAATIZEN costruisce\n[03:19.89]un domani pieno di possibilità.\n[03:27.42]SAATI Day, alza le mani,\n[03:30.67]questa energia ci porterà lontano,\n[03:34.76]tra sorrisi, scoperte e futuro,\n[03:37.82]camminiamo tutti mano nella mano.\n[03:41.55]SAATI Day, che bella storia,\n[03:45.01]da raccontare e ricordare poi,\n[03:48.95]perché dietro ogni grande impresa\n[03:52.06]ci siamo noi, ci siamo noi!\n[03:57.22]Oh-oh-oh... SAATI Day!\n[04:00.97]Oh-oh-oh... insieme a noi!\n[04:04.41]Oh-oh-oh... SAATI Day!\n[04:09.03]Una grande famiglia siamo noi!\n", "B": "[ti:Santa Claude]\n[ar:SAATI Music]\n[by:sincronizzato a mano]\n[00:00.00]♪\n[00:05.85]E’ Dicembre e anche quest’anno sta arrivando il Natale,\n[00:08.73]la gente corre per le strade a comprare i regali\n[00:11.89]io in casa ad aspettare un’idea originale,\n[00:14.51]alla fine chiedo a Claude per sorprese mai banali.\n[00:19.98]… Scrivi gli auguri per tutti i parenti,\n[00:22.50]caldi e sinceri, ma non invadenti.\n[00:25.35]Ho chiesto che tempo farà a Capodanno,\n[00:28.18]chi porta il pandoro, chi viene quest’anno,\n[00:31.10]la playlist perfetta, la stella cometa…\n[00:36.73]non per vantarmi, ma sembro un poeta.\n[00:45.65]Santa Claus, Santa Claus,\n[00:47.90]prima arrivava Santa Claus\n[00:50.90]adesso arriva Santa Claude!\n[00:54.15]Niente slitta, niente renne,\n[00:55.82]niente barba che vien giù,\n[00:57.57]Oh Santa Claude (Santa Claude)\n[00:59.66]Merry Christmas Santa Claude!\n[01:02.27]Oh Santa Claude (Santa Claude)\n[01:05.27]Merry Christmas Santa Claude!\n[01:07.92]Mamma fa il brodo, papà sceglie il vino,\n[01:10.85]io chiedo all’A.I. come addobbare il giardino.\n[01:13.70]La nonna mi guarda e mi dice: “Ma insomma!\n[01:16.73]devi chiedere a Claude pure come si sogna?”\n[01:19.51]Chi chiede ricette, chi chiede poesie,\n[01:22.18]chi fa gli auguri con le tecnologie,\n[01:25.20]chi non sa più cosa desiderare\n[01:27.98]e chiede all’A.I.: “Che mi faccio regalare?”\n[01:31.01]Santa Claus, Santa Claus,\n[01:33.30]prima arrivava Santa Claus\n[01:36.24]adesso arriva Santa Claude!\n[01:39.42]Niente slitta, niente renne,\n[01:41.10]niente barba che vien giù,\n[01:43.01]Oh Santa Claude (Santa Claude)\n[01:45.03]Merry Christmas Santa Claude!\n[01:47.56]Oh Santa Claude (Santa Claude)\n[01:50.57]Merry Christmas Santa Claude!\n[01:52.00]♪♪♪♪\n[02:04.50]Ormai senza prompt non sappiam più far niente,\n[02:07.52]ci sentiamo soli anche in mezzo alla gente.\n[02:10.51]Forse non serve sapere già tutto,\n[02:13.06]forse anche un errore può essere giusto.\n[02:16.03]Mio nonno si alza e ci passa il bicchiere,\n[02:18.76]non cerca le rime, non deve piacere.\n[02:21.59]Ci guarda un momento, poi dice così:\n[02:24.55]“Son solo contento che voi siate qui.”\n[02:29.70]Oh Santa Claude, Santa Claude,\n[02:34.15]Oh Santa Claude, Santa Claude\n[02:36.98](Oh Santa Claude, Santa Claude)\n[02:39.80]oggi vogliamo Santa Claus!\n[02:43.20]con la magia di una sorpresa,\n[02:44.56]il calore di un abbraccio,\n[02:46.35]un bacio sotto il vischio,\n[02:47.47]un amico ritrovato.\n[02:48.96]Spegniamo gli schermi,\n[02:50.20]accendiamo la mente,\n[02:51.58]riportiamo la vita\n[02:53.12]nel cuore della gente.\n[02:54.95]Oh Santa Claude, Santa Claude,\n[02:59.35]Merry Christmas, Santa Claude…\n[03:06.01]Meno intelligenza artificiale,\n[03:08.47]questa notte rendiamola speciale.\n[03:11.37]Tiriamo fuori quella originale:\n[03:14.09]l’intelligenza ARTIGIANALE.\n[03:17.05]Fatta di mani, farina e risate,\n[03:19.64]di cose imperfette, e per questo amate.\n[03:22.65]Niente aiuti per trovare le parole,\n[03:25.23]lasciamo che vengan\n[03:26.80]direttamente dal cuore!\n[03:30.10]Oh Santa Claude (Santa Claude)\n[03:33.10]Merry Christmas, Santa Claude…\n[03:36.03]Oh Santa Claude (Santa Claude)\n[03:38.67]Merry Christmas, Santa Claude\n[03:49.56]BUON NATALE\n[03:57.80]BUON NATALE!\n"};
+
+/* ============ Lingua (dal browser, riserva inglese) ============ */
+const I18N = {
+  it:{missing:"File {f} non trovato: deve stare nella stessa cartella di index.html",edition:"Edizione 45 giri · Natale 2026",short:"45 giri · 2026",sideA:"LATO A",sideB:"LATO B",side:"Lato",
+      play:"Play",pause:"Pausa",back:"Indietro di 10 secondi",fwd:"Avanti di 10 secondi",seek:"Posizione nel brano",
+      ready:"Pronto",playing:"In riproduzione",paused:"In pausa",flip:"Giralo! Ascolta il lato ",per:"Per",da:"Da",formato:"Formato",catalogo:"Catalogo",
+      perf:"Interpreti",auth:"Autori",cover:"Copertina del 45 giri SAATI Day",sides:"Scegli il lato",lyrics:"Testo sincronizzato",
+      syncHelp:"Sincronizzazione del lato {s}: premi Play e tocca «Segna riga» (o la barra spaziatrice) quando inizia ogni riga. Alla fine scarica il file .lrc.",
+      mark:"Segna riga",undo:"Annulla",restart:"Da capo",save:"Scarica .lrc"},
+  en:{missing:"{f} not found: it must be in the same folder as index.html",edition:"45 rpm edition · Christmas 2026",short:"45 rpm · 2026",sideA:"SIDE A",sideB:"SIDE B",side:"Side",
+      play:"Play",pause:"Pause",back:"Back 10 seconds",fwd:"Forward 10 seconds",seek:"Position in track",
+      ready:"Ready",playing:"Playing",paused:"Paused",flip:"Turn it over! Play side ",per:"For",da:"From",formato:"Format",catalogo:"Catalogue",
+      perf:"Performed by",auth:"Written by",cover:"Cover of the SAATI Day single",sides:"Choose a side",lyrics:"Synced lyrics (in Italian)",
+      syncHelp:"Syncing side {s}: press Play and tap “Mark line” (or the space bar) as each line starts. Then download the .lrc file.",
+      mark:"Mark line",undo:"Undo",restart:"Start over",save:"Download .lrc"},
+  fr:{missing:"{f} introuvable : il doit être dans le même dossier que index.html",edition:"Édition 45 tours · Noël 2026",short:"45 tours · 2026",sideA:"FACE A",sideB:"FACE B",side:"Face",
+      play:"Lecture",pause:"Pause",back:"Reculer de 10 secondes",fwd:"Avancer de 10 secondes",seek:"Position dans le morceau",
+      ready:"Prêt",playing:"Lecture en cours",paused:"En pause",flip:"Retournez-le ! Écoutez la face ",per:"Pour",da:"De la part de",formato:"Format",catalogo:"Catalogue",
+      perf:"Interprètes",auth:"Auteurs",cover:"Pochette du 45 tours SAATI Day",sides:"Choisir la face",lyrics:"Paroles synchronisées (en italien)",
+      syncHelp:"Synchronisation de la face {s} : lancez la lecture et touchez « Marquer » au début de chaque ligne, puis téléchargez le .lrc.",
+      mark:"Marquer",undo:"Annuler",restart:"Recommencer",save:"Télécharger .lrc"},
+  de:{missing:"{f} nicht gefunden: muss im selben Ordner wie index.html liegen",edition:"45er-Edition · Weihnachten 2026",short:"45er · 2026",sideA:"SEITE A",sideB:"SEITE B",side:"Seite",
+      play:"Abspielen",pause:"Pause",back:"10 Sekunden zurück",fwd:"10 Sekunden vor",seek:"Position im Titel",
+      ready:"Bereit",playing:"Läuft",paused:"Pausiert",flip:"Umdrehen! Seite anhören: ",per:"Für",da:"Von",formato:"Format",catalogo:"Katalog",
+      perf:"Interpreten",auth:"Autoren",cover:"Cover der SAATI-Day-Single",sides:"Seite wählen",lyrics:"Synchronisierter Songtext (italienisch)",
+      syncHelp:"Synchronisierung Seite {s}: Abspielen und bei jedem Zeilenbeginn „Markieren“ (oder Leertaste) tippen. Danach .lrc herunterladen.",
+      mark:"Markieren",undo:"Rückgängig",restart:"Neu starten",save:".lrc herunterladen"}
+};
+const LANG = (() => { for (const l of (navigator.languages || [navigator.language || "en"])) { const k = String(l).slice(0,2).toLowerCase(); if (I18N[k]) return k; } return "en"; })();
+const T = I18N[LANG];
+document.documentElement.lang = LANG;
+document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = T[el.dataset.i18n]);
+document.querySelectorAll("[data-i18n-label]").forEach(el => el.setAttribute("aria-label", T[el.dataset.i18nLabel]));
+
+/* ============ Riferimenti ============ */
+const $ = id => document.getElementById(id);
+const app = $("app"), audio = $("audio"), seek = $("seek"), scroller = $("scroller"), linesEl = $("lines");
+const SYNC = new URLSearchParams(location.search).has("sync");
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)");
+const isMobile = () => matchMedia("(max-width:760px)").matches;
+let side = "A", lines = [], meta = {}, active = -1, userScrollUntil = 0, raf = 0;
+const lrcCache = {};
+
+$("coverImg").alt = T.cover;
+$("sides").setAttribute("aria-label", T.sides);
+$("lyr").setAttribute("aria-label", T.lyrics);
+seek.setAttribute("aria-label", T.seek);
+["mark","undo","restart","save"].forEach(k => $(k).textContent = T[k]);
+
+/* Colophon */
+$("colo").innerHTML = [["per",CONFIG.per],["da",CONFIG.da],["formato",CONFIG.formato],["catalogo",CONFIG.catalogo]]
+  .filter(([,v]) => v).map(([k,v]) => `<div><dt>${T[k]}</dt><dd>${esc(v)}</dd></div>`).join("");
+
+/* ============ Utilità ============ */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const fmt = s => !isFinite(s) || s < 0 ? "0:00" : `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+const lrcTime = s => `[${String(Math.floor(s/60)).padStart(2,"0")}:${(s%60).toFixed(2).padStart(5,"0")}]`;
+
+function parseLRC(txt){
+  const out = [], m = {};
+  for (const raw of txt.split(/\r?\n/)) {
+    const tag = raw.match(/^\[(ti|ar|al|by|au|length):(.*)\]\s*$/i);
+    if (tag) { m[tag[1].toLowerCase()] = tag[2].trim(); continue; }
+    const stamps = [...raw.matchAll(/\[(\d+):(\d+(?:[.:]\d+)?)\]/g)];
+    if (!stamps.length) continue;
+    const text = raw.replace(/\[[^\]]*\]/g, "").trim();
+    for (const s of stamps) out.push({ t: +s[1]*60 + parseFloat(s[2].replace(":", ".")), text });
+  }
+  out.sort((a,b) => a.t - b.t);
+  return { lines: out.filter((l,i) => l.text || i === 0), meta: m };
+}
+
+async function getLRC(s){
+  if (lrcCache[s]) return lrcCache[s];
+  let txt = LRC_FALLBACK[s];
+  try { const r = await fetch(CONFIG.sides[s].lrc, { cache:"no-cache" }); if (r.ok) txt = await r.text(); } catch(e) {}
+  return (lrcCache[s] = txt);
+}
+
+/* ============ Testo ============ */
+function renderLines(){
+  linesEl.innerHTML = lines.map((l,i) => {
+    const note = l.text.startsWith("♪");
+    const txt = note ? (l.text.replace(/^♪\s*/,"") || "♪") : l.text;
+    return `<p class="ln${note ? " note" : ""}" data-i="${i}"><span class="ts">${SYNC && l.stamped === false ? "" : fmt(l.t) + "." + String(Math.floor((l.t%1)*10))}</span>${esc(txt)}</p>`;
+  }).join("");
+  active = -1;
+  sizePanel();
+  highlight(true);
+}
+
+function sizePanel(){
+  if (isMobile()) {
+    const top = $("lyr").getBoundingClientRect().top + scrollY;
+    const h = Math.max(200, Math.min(340, innerHeight - top - 14));
+    $("lyr").style.height = h + "px";
+  } else $("lyr").style.height = "";
+  linesEl.style.setProperty("--half", Math.round(scroller.clientHeight / 2) + "px");
+}
+
+function centerOn(el, instant){
+  if (!el || Date.now() < userScrollUntil) return;
+  const top = el.offsetTop + el.offsetHeight / 2 - scroller.clientHeight / 2;
+  scroller.scrollTo({ top, behavior: instant || REDUCE.matches ? "auto" : "smooth" });
+}
+
+function highlight(instant){
+  if (SYNC) return syncHighlight(instant);
+  const t = audio.currentTime || 0;
+  let i = -1;
+  for (let k = 0; k < lines.length; k++) { if (lines[k].t <= t + 0.05) i = k; else break; }
+  if (i === active && !instant) return;
+  const els = linesEl.children;
+  if (els[active]) els[active].classList.remove("on");
+  active = i;
+  if (els[i]) els[i].classList.add("on");
+  centerOn(els[Math.max(i,0)], instant);
+}
+
+scroller.addEventListener("scroll", () => scroller.classList.toggle("scrolled", scroller.scrollTop > 8), { passive:true });
+["wheel","touchstart"].forEach(ev => scroller.addEventListener(ev, () => userScrollUntil = Date.now() + 3000, { passive:true }));
+linesEl.addEventListener("click", e => {
+  const p = e.target.closest(".ln"); if (!p || SYNC) return;
+  userScrollUntil = 0; audio.currentTime = lines[+p.dataset.i].t; highlight();
+});
+
+/* ============ Lato e brano ============ */
+async function loadSide(s){
+  side = s;
+  const c = CONFIG.sides[s];
+  audio.src = c.audio;
+  audio.load();
+  app.classList.remove("ended", "out");
+  $("pos").textContent = `${T.side} ${s} · ${c.brano}`;
+  $("title").innerHTML = esc(c.titolo) + (c.sottotitolo ? ` <small>${esc(c.sottotitolo)}</small>` : "");
+  $("credits").innerHTML = [[T.perf,c.interpreti],[T.auth,c.autori]].filter(([,v]) => v).map(([k,v]) => `${k}: ${esc(v)}`).join("<br>");
+  $("labelSide").textContent = s;
+  $("labelText").textContent = `SAATI MUSIC · ${CONFIG.catalogo} · ${T.side.toUpperCase()} ${s} · 45 ·`;
+  document.querySelector(".mside").textContent = s;
+  document.querySelectorAll(".sides button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.side === s)));
+  $("flip").textContent = T.flip + (s === "A" ? "B" : "A");
+  $("syncHelp").textContent = T.syncHelp.replace("{s}", s);
+  setStatus(T.ready);
+  setProgress();
+  setArm("rest");
+  const parsed = parseLRC(await getLRC(s));
+  if (side !== s) return;
+  meta = parsed.meta;
+  lines = parsed.lines;
+  if (SYNC) lines.forEach((l,i) => l.stamped = i === 0);
+  renderLines();
+  if ("mediaSession" in navigator) navigator.mediaSession.metadata = new MediaMetadata({
+    title: c.titolo, artist: c.interpreti || "SAATI Music", album: `SAATI 45 · ${CONFIG.catalogo}`,
+    artwork: [{ src:"copertina.jpg", sizes:"1400x1400", type:"image/jpeg" }]
+  });
+}
+
+function setSide(s){
+  if (s === side) return;
+  const wasPlaying = !audio.paused;
+  audio.pause();
+  loadSide(s).then(() => { if (wasPlaying) play(); });
+}
+
+/* ============ Braccio (desktop) ============ */
+const P = { x:440, y:56 }, C = { x:190, y:170 }, ARM = 232, R_EDGE = 98, R_END = 52;
+function angleFor(r){
+  for (let a = 0; a < 80; a += 0.05) {
+    const rad = a * Math.PI / 180, x = P.x - ARM * Math.sin(rad), y = P.y + ARM * Math.cos(rad);
+    if (Math.hypot(x - C.x, y - C.y) <= r) return a;
+  }
+  return 40;
+}
+const A_EDGE = angleFor(R_EDGE), A_END = angleFor(R_END);
+const arm = document.getElementById("arm");
+let armState = "rest";
+function setArm(state){
+  armState = state;
+  if (state === "rest") { arm.classList.remove("track"); arm.style.transform = "rotate(0deg)"; return; }
+  const p = audio.duration ? Math.min(1, audio.currentTime / audio.duration) : 0;
+  const a = A_EDGE + (A_END - A_EDGE) * p;
+  arm.style.transform = `rotate(${a.toFixed(2)}deg)`;
+}
+function dropArm(){
+  arm.classList.remove("track");
+  setArm("on");
+  setTimeout(() => { if (armState === "on") arm.classList.add("track"); }, 950);
+}
+
+/* ============ Riproduzione ============ */
+function setStatus(s, err){ $("status").textContent = s; $("status").classList.toggle("err", !!err); }
+function showMissing(){
+  app.classList.remove("playing","out","ended"); setArm("rest");
+  setStatus(T.missing.replace("{f}", CONFIG.sides[side].audio), true);
+}
+audio.addEventListener("error", showMissing);
+const coverImg = document.getElementById("coverImg");
+const coverMissing = () => document.getElementById("sleeve").classList.add("missing");
+coverImg.addEventListener("error", coverMissing);
+if (coverImg.complete && !coverImg.naturalWidth) coverMissing();
+function play(){
+  app.classList.remove("ended");
+  if (armState === "rest") dropArm();
+  app.classList.add("out");
+  audio.play().catch(err => { if (err && err.name === "NotAllowedError") return; showMissing(); });
+}
+function toggle(){ audio.paused ? play() : audio.pause(); }
+
+function setProgress(){
+  const d = audio.duration || 0, c = audio.currentTime || 0;
+  $("cur").textContent = fmt(c);
+  $("dur").textContent = fmt(d);
+  const p = d ? c / d * 1000 : 0;
+  if (!seek.matches(":active")) seek.value = p;
+  seek.style.setProperty("--p", p / 10 + "%");
+}
+
+function tick(){
+  setProgress();
+  highlight();
+  if (armState === "on") setArm("on");
+  raf = requestAnimationFrame(tick);
+}
+
+audio.addEventListener("play", () => {
+  app.classList.add("playing");
+  $("play").setAttribute("aria-label", T.pause); setStatus(T.playing);
+  cancelAnimationFrame(raf); raf = requestAnimationFrame(tick);
+});
+audio.addEventListener("pause", () => {
+  app.classList.remove("playing");
+  $("play").setAttribute("aria-label", T.play);
+  if (!audio.ended) setStatus(audio.currentTime > 0 ? T.paused : T.ready);
+  cancelAnimationFrame(raf); setProgress();
+});
+audio.addEventListener("ended", () => {
+  app.classList.remove("playing", "out");
+  app.classList.add("ended");
+  setArm("rest");
+});
+audio.addEventListener("loadedmetadata", () => { setProgress(); $("dur" + side).textContent = fmt(audio.duration); });
+audio.addEventListener("seeked", () => { setProgress(); highlight(true); if (armState === "on") setArm("on"); });
+
+$("play").addEventListener("click", toggle);
+$("back").addEventListener("click", () => { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+$("fwd").addEventListener("click", () => { if (audio.duration) audio.currentTime = Math.min(audio.duration - 0.2, audio.currentTime + 10); });
+$("flip").addEventListener("click", () => { const s = side === "A" ? "B" : "A"; loadSide(s).then(play); });
+document.querySelectorAll(".sides button").forEach(b => b.addEventListener("click", () => setSide(b.dataset.side)));
+seek.addEventListener("input", () => {
+  if (!audio.duration) return;
+  const t = seek.value / 1000 * audio.duration;
+  $("cur").textContent = fmt(t); seek.style.setProperty("--p", seek.value / 10 + "%");
+});
+seek.addEventListener("change", () => { if (audio.duration) audio.currentTime = seek.value / 1000 * audio.duration; });
+
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input, button") && e.code !== "Space") return;
+  if (SYNC && (e.code === "Space" || e.code === "Enter")) { e.preventDefault(); mark(); return; }
+  if (SYNC && e.code === "Backspace") { e.preventDefault(); undo(); return; }
+  if (e.target.closest("button")) return;
+  if (e.code === "Space") { e.preventDefault(); toggle(); }
+  if (e.code === "ArrowLeft") $("back").click();
+  if (e.code === "ArrowRight") $("fwd").click();
+});
+
+if ("mediaSession" in navigator) {
+  navigator.mediaSession.setActionHandler("play", play);
+  navigator.mediaSession.setActionHandler("pause", () => audio.pause());
+  navigator.mediaSession.setActionHandler("seekbackward", () => $("back").click());
+  navigator.mediaSession.setActionHandler("seekforward", () => $("fwd").click());
+}
+
+/* ============ Strumento «tocca a ogni riga» (index.html?sync) ============ */
+function nextIndex(){ return lines.findIndex(l => !l.stamped); }
+function syncHighlight(instant){
+  const n = nextIndex(), els = linesEl.children;
+  [...els].forEach((el,i) => {
+    el.classList.toggle("next", i === n);
+    el.querySelector(".ts").textContent = lines[i].stamped ? lrcTime(lines[i].t).slice(1,-1) : "";
+  });
+  if (n !== active) { active = n; centerOn(els[n === -1 ? els.length - 1 : n], instant); }
+}
+function mark(){
+  const n = nextIndex(); if (n === -1) return;
+  lines[n].t = audio.currentTime; lines[n].stamped = true; active = -2; syncHighlight();
+}
+function undo(){
+  let n = nextIndex(); n = n === -1 ? lines.length - 1 : n - 1;
+  if (n > 0) { lines[n].stamped = false; active = -2; syncHighlight(); }
+}
+function saveLRC(){
+  const head = [`[ti:${meta.ti || CONFIG.sides[side].titolo}]`, `[ar:${meta.ar || "SAATI Music"}]`, `[by:sincronizzato a mano]`];
+  const body = lines.filter(l => l.stamped).map(l => lrcTime(l.t) + l.text);
+  const blob = new Blob([head.concat(body).join("\n") + "\n"], { type:"text/plain;charset=utf-8" });
+  const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: CONFIG.sides[side].lrc });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+if (SYNC) {
+  app.classList.add("sync");
+  $("mark").addEventListener("click", mark);
+  $("undo").addEventListener("click", undo);
+  $("restart").addEventListener("click", () => { audio.pause(); audio.currentTime = 0; lines.forEach((l,i) => l.stamped = i === 0); active = -2; syncHighlight(true); });
+  $("save").addEventListener("click", saveLRC);
+}
+
+/* ============ Avvio ============ */
+addEventListener("resize", () => { sizePanel(); highlight(true); });
+loadSide("A");
+</script>
+</body>
+</html>
