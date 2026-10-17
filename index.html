@@ -147,6 +147,7 @@ main{flex:1;min-height:0;display:grid;padding:24px 0 24px;
 
 /* ---------- Smartphone: disco dalla busta ---------- */
 @media (max-width:760px){
+  :root{--cv:clamp(124px,21vh,190px)} /* copertina: piu piccola su schermi bassi (iPhone SE), 190px sui telefoni alti */
   .app{height:auto;min-height:0;padding:0 18px}
   .mast{padding:14px 0 10px}
   .mast .brand,.mast .ed,.mast .cat{display:none}
@@ -156,16 +157,16 @@ main{flex:1;min-height:0;display:grid;padding:24px 0 24px;
   .right{padding-left:0}
   .lyr.right{margin-left:0}
   .tt{display:none}
-  .sleeve-block{width:190px;align-self:flex-start}
-  .mdisc-slot{display:block;position:absolute;z-index:1;top:5px;left:8px;width:180px;height:180px;
-    transform:translateX(22px);transition:transform .6s cubic-bezier(.3,.7,.3,1)}
-  .out .mdisc-slot{transform:translateX(66px)}
+  .sleeve-block{width:var(--cv);align-self:flex-start}
+  .mdisc-slot{display:block;position:absolute;z-index:1;top:calc(var(--cv) * .026);left:calc(var(--cv) * .042);width:calc(var(--cv) * .947);height:calc(var(--cv) * .947);
+    transform:translateX(calc(var(--cv) * .116));transition:transform .6s cubic-bezier(.3,.7,.3,1)}
+  .out .mdisc-slot{transform:translateX(calc(var(--cv) * .347))}
   .mdisc{width:100%;height:100%;border-radius:50%;position:relative;
     background:repeating-radial-gradient(circle,#24201b 0 .8px,#17140F .8px 2.2px);
     box-shadow:0 6px 14px -6px rgba(23,20,15,.5);
     animation:spin 1.333s linear infinite;animation-play-state:paused}
   .playing .mdisc{animation-play-state:running}
-  .mdisc .lbl{position:absolute;inset:26%;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:1.3rem}
+  .mdisc .lbl{position:absolute;inset:26%;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:600;font-size:calc(var(--cv) * .11)}
   .mdisc .lbl::after{content:"";position:absolute;inset:40%;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--ink) inset}
   .mdisc .lbl span{position:absolute;top:10%}
   .mdisc::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 12%,rgba(255,255,255,.12) 16%,transparent 22% 62%,rgba(255,255,255,.08) 66%,transparent 72%)}
