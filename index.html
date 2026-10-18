@@ -147,17 +147,27 @@ main{flex:1;min-height:0;display:grid;padding:24px 0 24px;
 
 /* ---------- Smartphone: disco dalla busta ---------- */
 @media (max-width:760px){
-  :root{--cv:clamp(124px,21vh,190px)} /* copertina: piu piccola su schermi bassi (iPhone SE), 190px sui telefoni alti */
+  :root{--cv:clamp(104px,min(calc((100vw - 36px - 12px - 124px) / 1.34),24vh),180px)} /* copertina: lascia a destra almeno 124px per titolo e pulsanti */
   .app{height:auto;min-height:0;padding:0 18px}
   .mast{padding:14px 0 10px}
   .mast .brand,.mast .ed,.mast .cat{display:none}
   .mast .short{display:block;color:var(--ink)}
   .mast .short b{font-family:var(--serif);font-weight:600;font-size:1rem;font-family:var(--serif)}
-  main{display:flex;flex-direction:column;gap:12px;padding:16px 0 28px}
+  /* blocco alto: busta+disco a sinistra, titolo+lati a destra, stessa altezza */
+  main{display:grid;padding:16px 0 28px;column-gap:12px;row-gap:12px;
+    grid-template-columns:calc(var(--cv) * 1.34) minmax(0,1fr);
+    grid-template-rows:auto 1fr auto auto auto auto;
+    grid-template-areas:
+      "cover info"
+      "cover sides"
+      "ctrl  ctrl"
+      "prog  prog"
+      "lyr   lyr"
+      "colo  colo"}
   .right{padding-left:0}
   .lyr.right{margin-left:0}
   .tt{display:none}
-  .sleeve-block{width:var(--cv);align-self:flex-start}
+  .sleeve-block{width:var(--cv);align-self:start}
   .mdisc-slot{display:block;position:absolute;z-index:1;top:calc(var(--cv) * .026);left:calc(var(--cv) * .042);width:calc(var(--cv) * .947);height:calc(var(--cv) * .947);
     transform:translateX(calc(var(--cv) * .116));transition:transform .6s cubic-bezier(.3,.7,.3,1)}
   .out .mdisc-slot{transform:translateX(calc(var(--cv) * .347))}
@@ -170,13 +180,18 @@ main{flex:1;min-height:0;display:grid;padding:24px 0 24px;
   .mdisc .lbl::after{content:"";position:absolute;inset:40%;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--ink) inset}
   .mdisc .lbl span{position:absolute;top:10%}
   .mdisc::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 30deg,transparent 0 12%,rgba(255,255,255,.12) 16%,transparent 22% 62%,rgba(255,255,255,.08) 66%,transparent 72%)}
-  .info{padding-top:4px;order:0}
-  .info h1{font-size:1.5rem;margin:2px 0 4px}
-  .sides{order:1}
-  .ctrl{order:2}
-  .prog{order:3;margin-top:-6px}
-  .lyr{order:4;height:276px;flex:none;margin-top:0}
-  .colo{order:5;padding-top:28px;grid-template-columns:1fr 1fr;gap:12px 18px}
+  .info{padding-top:0;min-width:0;align-self:start}
+  .info .pos{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .info h1{font-size:clamp(1.1rem,4.8vw,1.5rem);margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .info .credits{display:none} /* su mobile non c'è spazio: interpreti e autori allungherebbero il blocco */
+  .sides{grid-template-columns:1fr;gap:8px;align-self:end}
+  /* i due pulsanti si dividono l'altezza rimasta, così il blocco destro finisce esattamente al fondo della busta */
+  .sides button{height:clamp(30px,calc((var(--cv) - 66px) / 2),46px);padding:0 12px;font-size:.82rem}
+  .ctrl{margin-top:4px}
+  .skip,.play{flex:none} /* non si deformano se il messaggio di stato è lungo */
+  .prog{margin-top:-6px}
+  .lyr{height:276px;margin-top:0}
+  .colo{padding-top:28px;grid-template-columns:1fr 1fr;gap:12px 18px}
   .scroller{padding:0 18px}
   .ln{font-size:.98rem}
   .ln.on{font-size:1.1rem}
@@ -416,7 +431,7 @@ function renderLines(){
 function sizePanel(){
   if (isMobile()) {
     const top = $("lyr").getBoundingClientRect().top + scrollY;
-    const h = Math.max(200, Math.min(340, innerHeight - top - 14));
+    const h = Math.max(200, Math.min(460, innerHeight - top - 14));
     $("lyr").style.height = h + "px";
   } else $("lyr").style.height = "";
   linesEl.style.setProperty("--half", Math.round(scroller.clientHeight / 2) + "px");
